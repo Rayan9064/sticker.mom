@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Plus } from 'lucide-react';
-import { Product } from '../types';
+import { Product } from '../../types';
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -98,7 +98,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 {/* Image indicators */}
                 {product.images.length > 1 && (
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                    {product.images.map((_, index) => (
+                    {product.images.map((_: string, index: number) => (
                       <div
                         key={index}
                         className={`w-2 h-2 rounded-full transition-colors duration-200 ${

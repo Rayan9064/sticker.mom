@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, CreditCard, Shield } from 'lucide-react';
-import { CartItem, CheckoutForm } from '../types';
+import { CartItem, CheckoutForm } from '../../types';
 
 interface CheckoutProps {
   isOpen: boolean;
@@ -40,7 +40,7 @@ export const Checkout: React.FC<CheckoutProps> = ({
   };
 
   const handleInputChange = (field: keyof CheckoutForm, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev: CheckoutForm) => ({ ...prev, [field]: value }));
   };
 
   if (!isOpen) return null;

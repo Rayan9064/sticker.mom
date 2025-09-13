@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/admin/ui/dialog';
 import { Button } from '@/components/admin/ui/button';
 import { Input } from '@/components/admin/ui/input';

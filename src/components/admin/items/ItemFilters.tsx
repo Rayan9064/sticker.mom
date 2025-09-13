@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from '@/components/admin/ui/select';
 import { Search, X, Filter } from 'lucide-react';
-import { Item } from '@/types/item';
 
 interface ItemFiltersProps {
   searchTerm: string;

@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/admin/ui/select';
 import { Badge } from '@/components/admin/ui/badge';
-import { X, Upload, Plus } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 
 interface ItemFormModalProps {
   isOpen: boolean;

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Item } from '@/types/item';
 import { Button } from '@/components/admin/ui/button';
 import { Badge } from '@/components/admin/ui/badge';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { DashboardLayout } from '@/components/admin/layout/DashboardLayout';
 import { ItemsDashboard } from '@/components/admin/items/ItemsDashboard';
 
