@@ -1,22 +1,46 @@
 import { ReactNode } from 'react';
-import { Package, Search, Settings, Users } from 'lucide-react';
+import { Package, Search, Settings, Users, LogOut } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
+  const handleLogout = async () => {
+    try {
+      console.log('Signing out...')
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Sign out error:', error)
+      } else {
+        console.log('Sign out successful')
+      }
+    } catch (error) {
+      console.error('Exception during sign out:', error)
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
       <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center px-6 py-4 border-b border-gray-200">
-            <Package className="w-8 h-8 text-gray-700" />
-            <span className="ml-3 text-xl font-semibold text-gray-900">
-              Store Admin
-            </span>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center">
+              <Package className="w-8 h-8 text-gray-700" />
+              <span className="ml-3 text-xl font-semibold text-gray-900">
+                Store Admin
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
           </div>
 
           {/* Navigation */}

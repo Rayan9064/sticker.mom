@@ -1,4 +1,4 @@
-import { Item } from '@/types/item';
+import { Product } from '@/lib/supabase';
 import { Button } from '@/components/admin/ui/button';
 import { Badge } from '@/components/admin/ui/badge';
 import { MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react';
@@ -18,23 +18,16 @@ import {
 } from '@/components/admin/ui/table';
 
 interface ItemsTableProps {
-  items: Item[];
-  onEdit: (item: Item) => void;
+  items: Product[];
+  onEdit: (item: Product) => void;
   onDelete: (itemId: string) => void;
 }
 
 export function ItemsTable({ items, onEdit, onDelete }: ItemsTableProps) {
-  const getStatusColor = (status: Item['status']) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'draft':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'archived':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+  const getStatusColor = (inStock: boolean) => {
+    return inStock
+      ? 'bg-green-100 text-green-800 border-green-200'
+      : 'bg-red-100 text-red-800 border-red-200';
   };
 
   const formatPrice = (price: number) => {
@@ -44,8 +37,8 @@ export function ItemsTable({ items, onEdit, onDelete }: ItemsTableProps) {
     }).format(price);
   };
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -60,8 +53,8 @@ export function ItemsTable({ items, onEdit, onDelete }: ItemsTableProps) {
             <TableHead className="w-16">Image</TableHead>
             <TableHead className="font-semibold">Name</TableHead>
             <TableHead className="font-semibold">Price</TableHead>
-            <TableHead className="font-semibold">Status</TableHead>
-            <TableHead className="font-semibold">Tags</TableHead>
+            <TableHead className="font-semibold">Stock Status</TableHead>
+            <TableHead className="font-semibold">Category</TableHead>
             <TableHead className="font-semibold">Updated</TableHead>
             <TableHead className="w-16"></TableHead>
           </TableRow>
@@ -96,27 +89,18 @@ export function ItemsTable({ items, onEdit, onDelete }: ItemsTableProps) {
               <TableCell>
                 <Badge
                   variant="outline"
-                  className={`capitalize ${getStatusColor(item.status)}`}
+                  className={`capitalize ${getStatusColor(item.inStock)}`}
                 >
-                  {item.status}
+                  {item.inStock ? 'In Stock' : 'Out of Stock'}
                 </Badge>
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap gap-1 max-w-xs">
-                  {item.tags.slice(0, 2).map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {item.tags.length > 2 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{item.tags.length - 2}
-                    </Badge>
-                  )}
-                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {item.category}
+                </Badge>
               </TableCell>
               <TableCell className="text-gray-500">
-                {formatDate(item.updatedAt)}
+                {item.updated_at ? formatDate(item.updated_at) : 'N/A'}
               </TableCell>
               <TableCell>
                 <DropdownMenu>

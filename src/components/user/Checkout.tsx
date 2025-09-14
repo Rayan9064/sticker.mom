@@ -31,12 +31,35 @@ export const Checkout: React.FC<CheckoutProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsProcessing(false);
-    onOrderComplete();
+
+    try {
+      const orderData = {
+        cartItems,
+        totalPrice,
+        ...formData
+      };
+
+      const response = await fetch('/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        console.log('Order submitted successfully');
+        onOrderComplete();
+      } else {
+        console.error('Failed to submit order');
+        alert('Failed to submit order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('Error submitting order. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleInputChange = (field: keyof CheckoutForm, value: string) => {

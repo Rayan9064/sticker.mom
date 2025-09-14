@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { Button } from '@/components/admin/ui/button';
 import { Input } from '@/components/admin/ui/input';
-import { Badge } from '@/components/admin/ui/badge';
 import {
   Select,
   SelectContent,
@@ -9,42 +7,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/admin/ui/select';
-import { Search, X, Filter } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 
 interface ItemFiltersProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
-  selectedStatus: string;
-  onStatusChange: (status: string) => void;
-  selectedTags: string[];
-  onTagsChange: (tags: string[]) => void;
-  availableTags: string[];
+  selectedStockStatus: string;
+  onStockStatusChange: (status: string) => void;
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
+  availableCategories: string[];
   onReset: () => void;
 }
 
 export function ItemFilters({
   searchTerm,
   onSearchChange,
-  selectedStatus,
-  onStatusChange,
-  selectedTags,
-  onTagsChange,
-  availableTags,
+  selectedStockStatus,
+  onStockStatusChange,
+  selectedCategory,
+  onCategoryChange,
+  availableCategories,
   onReset,
 }: ItemFiltersProps) {
-  const [showAllTags, setShowAllTags] = useState(false);
-
-  const handleTagClick = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      onTagsChange(selectedTags.filter((t) => t !== tag));
-    } else {
-      onTagsChange([...selectedTags, tag]);
-    }
-  };
-
-  const hasActiveFilters = searchTerm || selectedStatus !== 'all' || selectedTags.length > 0;
-
-  const displayedTags = showAllTags ? availableTags : availableTags.slice(0, 8);
+  const hasActiveFilters = searchTerm || selectedStockStatus !== 'all' || selectedCategory !== 'all';
 
   return (
     <div className="space-y-4 p-6 bg-white rounded-lg border border-gray-200">
@@ -77,58 +63,41 @@ export function ItemFilters({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Status Filter */}
+        {/* Stock Status Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Status
+            Stock Status
           </label>
-          <Select value={selectedStatus} onValueChange={onStatusChange}>
+          <Select value={selectedStockStatus} onValueChange={onStockStatusChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Select status" />
+              <SelectValue placeholder="Select stock status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="archived">Archived</SelectItem>
+              <SelectItem value="all">All Items</SelectItem>
+              <SelectItem value="in-stock">In Stock</SelectItem>
+              <SelectItem value="out-of-stock">Out of Stock</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Tags */}
+        {/* Category Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tags
+            Category
           </label>
-          <div className="flex flex-wrap gap-2">
-            {displayedTags.map((tag) => (
-              <Badge
-                key={tag}
-                variant={selectedTags.includes(tag) ? "default" : "outline"}
-                className={`cursor-pointer transition-colors ${
-                  selectedTags.includes(tag)
-                    ? 'bg-gray-900 hover:bg-gray-800'
-                    : 'hover:bg-gray-100'
-                }`}
-                onClick={() => handleTagClick(tag)}
-              >
-                {tag}
-                {selectedTags.includes(tag) && (
-                  <X className="ml-1 h-3 w-3" />
-                )}
-              </Badge>
-            ))}
-            {availableTags.length > 8 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAllTags(!showAllTags)}
-                className="h-6 px-2 text-xs"
-              >
-                {showAllTags ? 'Show less' : `+${availableTags.length - 8} more`}
-              </Button>
-            )}
-          </div>
+          <Select value={selectedCategory} onValueChange={onCategoryChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {availableCategories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
